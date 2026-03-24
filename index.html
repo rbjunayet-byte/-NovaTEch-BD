@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#080b12">
+<meta name="mobile-web-app-capable" content="yes">
+<title>NovaTEch BD</title>
+<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&family=Amiri:ital,wght@0,400;0,700;1,400&family=Sora:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — CSS VARIABLES
+═══════════════════════════════════════════ */
+:root {
+  /* Backgrounds */
+  --bg-base:       #080b12;
+  --bg-surface:    #0d1220;
+  --bg-card:       #111827;
+  --bg-elevated:   #162033;
+  --bg-input:      #0d1525;
+
+  /* Gold Accent */
+  --gold-bright:   #f5c842;
+  --gold-mid:      #d4a017;
+  --gold-dim:      #a07810;
+  --gold-glow:     rgba(245, 200, 66, 0.18);
+  --gold-subtle:   rgba(245, 200, 66, 0.06);
+
+  /* Status */
+  --blue:          #3b82f6;
+  --green:         #10b981;
+  --red:           #ef4444;
+  --purple:        #8b5cf6;
+
+  /* Text */
+  --text-primary:  #f1f5f9;
+  --text-secondary:#94a3b8;
+  --text-muted:    #475569;
+  --text-gold:     #f5c842;
+
+  /* Borders */
+  --border:        rgba(99, 179, 237, 0.08);
+  --border-gold:   rgba(245, 200, 66, 0.25);
+  --border-focus:  rgba(245, 200, 66, 0.5);
+
+  /* Shadows */
+  --shadow-card:   0 4px 24px rgba(0,0,0,0.4);
+  --shadow-gold:   0 0 40px rgba(245, 200, 66, 0.12);
+  --shadow-input:  0 2px 8px rgba(0,0,0,0.3);
+
+  /* Typography */
+  --font-bn:       'Hind Siliguri', sans-serif;
+  --font-ar:       'Amiri', serif;
+  --font-en:       'Sora', sans-serif;
+
+  /* Radii */
+  --r-sm:  8px;
+  --r-md:  12px;
+  --r-lg:  16px;
+  --r-xl:  20px;
+  --r-2xl: 28px;
+}
+
+/* ═══════════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-bn);
+  background: var(--bg-base);
+  color: var(--text-primary);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════════
+   LOGIN SCREEN
+═══════════════════════════════════════════ */
+#authScreen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Animated mesh background */
+#authScreen::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(245,200,66,0.07) 0%, transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 15%, rgba(59,130,246,0.06) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 50% at 50% 95%, rgba(139,92,246,0.05) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 50% 50%, rgba(16,24,40,0.9) 0%, transparent 100%);
+  pointer-events: none;
+  z-index: 0;
+  animation: bgPulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes bgPulse {
+  from { opacity: 0.8; }
+  to   { opacity: 1; }
+}
+
+/* Grid texture */
+#authScreen::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(245,200,66,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(245,200,66,0.025) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-wrap {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 400px;
+  animation: fadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Bismillah ── */
+.bismillah-wrap {
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.bismillah-line {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-mid), transparent);
+  margin: 0 auto 14px;
+}
+
+.bismillah-text {
+  font-family: var(--font-ar);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold-bright);
+  text-shadow:
+    0 0 30px rgba(245,200,66,0.4),
+    0 0 60px rgba(245,200,66,0.15);
+  letter-spacing: 1px;
+  line-height: 1.6;
+  direction: rtl;
+}
+
+.bismillah-bn {
+  font-family: var(--font-bn);
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-top: 6px;
+  letter-spacing: 0.5px;
+}
+
+/* ── Logo / Brand ── */
+.brand-wrap {
+  text-align: center;
+  margin-bottom: 28px;
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.2s both;
+}
+
+.brand-icon {
+  width: 68px;
+  height: 68px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #1a2540 0%, #111827 100%);
+  border: 1.5px solid var(--border-gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 14px;
+  box-shadow: var(--shadow-gold), inset 0 1px 0 rgba(245,200,66,0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-icon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(245,200,66,0.08) 0%, transparent 60%);
+}
+
+.brand-icon-inner {
+  font-size: 30px;
+  position: relative;
+  z-index: 1;
+  filter: drop-shadow(0 0 8px rgba(245,200,66,0.5));
+}
+
+.brand-name {
+  font-family: var(--font-en);
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.5px;
+}
+
+.brand-name span {
+  color: var(--gold-bright);
+}
+
+.brand-tagline {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  font-weight: 400;
+}
+
+/* ── Login Card ── */
+.login-card {
+  background: linear-gradient(145deg, rgba(17,24,39,0.95) 0%, rgba(13,18,32,0.98) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--r-2xl);
+  padding: 28px 24px;
+  box-shadow: var(--shadow-card), var(--shadow-gold);
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+  backdrop-filter: blur(20px);
+}
+
+.login-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(245,200,66,0.4), transparent);
+}
+
+.login-card::after {
+  content: '';
+  position: absolute;
+  top: -60px; right: -60px;
+  width: 160px; height: 160px;
+  background: radial-gradient(circle, rgba(245,200,66,0.04) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.card-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.card-sub {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 22px;
+}
+
+/* ── Login Method Tabs ── */
+.method-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  background: var(--bg-input);
+  border-radius: var(--r-md);
+  padding: 3px;
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+}
+
+.method-tab {
+  padding: 8px 4px;
+  border: none;
+  background: none;
+  border-radius: var(--r-sm);
+  font-family: var(--font-bn);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.method-tab .tab-ico {
+  font-size: 14px;
+}
+
+.method-tab.active {
+  background: linear-gradient(135deg, #1e2d4a, #1a2538);
+  color: var(--gold-bright);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3), inset 0 1px 0 rgba(245,200,66,0.1);
+}
+
+/* ── Input Group ── */
+.inp-group {
+  margin-bottom: 14px;
+}
+
+.inp-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.inp-label .lbl-ico {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.inp-wrap {
+  position: relative;
+}
+
+.inp {
+  width: 100%;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 12px 42px 12px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-bn);
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-input);
+}
+
+.inp::placeholder {
+  color: var(--text-muted);
+  font-size: 13px;
+}
+
+.inp:focus {
+  border-color: var(--border-focus);
+  background: rgba(13, 21, 37, 0.95);
+  box-shadow: 0 0 0 3px rgba(245,200,66,0.08), var(--shadow-input);
+}
+
+.inp-icon {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 15px;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+.inp:focus + .inp-icon {
+  color: var(--gold-mid);
+}
+
+.inp-wrap.with-toggle .inp {
+  padding-right: 70px;
+}
+
+.pass-toggle {
+  position: absolute;
+  right: 13px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px;
+  transition: color 0.2s;
+  font-family: inherit;
+}
+
+.pass-toggle:hover { color: var(--gold-bright); }
+
+/* ── Error ── */
+.auth-err {
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--r-sm);
+  padding: 9px 12px;
+  font-size: 12px;
+  color: #fca5a5;
+  margin-bottom: 14px;
+  display: none;
+  align-items: center;
+  gap: 7px;
+}
+
+.auth-err.show {
+  display: flex;
+  animation: shake 0.35s ease;
+}
+
+@keyframes shake {
+  0%,100% { transform: translateX(0); }
+  25%      { transform: translateX(-6px); }
+  75%      { transform: translateX(6px); }
+}
+
+/* ── Login Button ── */
+.btn-login {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: var(--r-md);
+  background: linear-gradient(135deg, #c9961a 0%, #f5c842 50%, #d4a017 100%);
+  color: #0d0900;
+  font-family: var(--font-bn);
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(245,200,66,0.3), 0 1px 0 rgba(255,255,255,0.1) inset;
+  margin-top: 6px;
+  letter-spacing: 0.2px;
+}
+
+.btn-login::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+  transition: left 0.4s ease;
+}
+
+.btn-login:hover::before { left: 100%; }
+
+.btn-login:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 10px rgba(245,200,66,0.2);
+}
+
+.btn-login.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.btn-login .btn-spinner {
+  display: none;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(0,0,0,0.3);
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin: 0 auto;
+}
+
+.btn-login.loading .btn-text { display: none; }
+.btn-login.loading .btn-spinner { display: block; }
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Footer ── */
+.auth-footer {
+  text-align: center;
+  margin-top: 20px;
+  animation: fadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+}
+
+.auth-footer p {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.auth-footer p span {
+  color: var(--gold-mid);
+  font-weight: 600;
+}
+
+/* ── Role Pills ── */
+.role-pills {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.role-pill {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+.pill-admin   { background: rgba(245,200,66,0.12); color: var(--gold-bright); border: 1px solid rgba(245,200,66,0.2); }
+.pill-manager { background: rgba(59,130,246,0.12);  color: #60a5fa;            border: 1px solid rgba(59,130,246,0.2); }
+.pill-worker  { background: rgba(16,185,129,0.12); color: #34d399;            border: 1px solid rgba(16,185,129,0.2); }
+
+/* ── Divider ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.divider-line {
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.divider-text {
+  font-size: 10px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Floating orbs ── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(245,200,66,0.06), transparent);
+  top: 5%; left: -50px;
+  animation-delay: 0s;
+}
+
+.orb-2 {
+  width: 250px; height: 250px;
+  background: radial-gradient(circle, rgba(59,130,246,0.05), transparent);
+  bottom: 10%; right: -80px;
+  animation-delay: -4s;
+}
+
+.orb-3 {
+  width: 180px; height: 180px;
+  background: radial-gradient(circle, rgba(139,92,246,0.04), transparent);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation-delay: -8s;
+}
+
+@keyframes orbFloat {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(20px, -20px) scale(1.1); }
+}
+
+/* ── App Screen (hidden initially) ── */
+#appScreen {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg-base);
+}
+
+/* ── Toast ── */
+.toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 10px 18px;
+  font-size: 13px;
+  color: var(--text-primary);
+  font-family: var(--font-bn);
+  z-index: 9999;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+  white-space: nowrap;
+  max-width: 85vw;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+  pointer-events: none;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.err {
+  background: rgba(239,68,68,0.15);
+  border-color: rgba(239,68,68,0.3);
+  color: #fca5a5;
+}
+
+.toast.success {
+  background: rgba(16,185,129,0.15);
+  border-color: rgba(16,185,129,0.3);
+  color: #6ee7b7;
+}
+
+/* ── Loader ── */
+#pageLoader {
+  position: fixed;
+  inset: 0;
+  background: var(--bg-base);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  z-index: 9998;
+}
+
+.loader-logo {
+  font-family: var(--font-en);
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.loader-logo span { color: var(--gold-bright); }
+
+.loader-ring {
+  width: 36px;
+  height: 36px;
+  border: 2px solid var(--border);
+  border-top-color: var(--gold-bright);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+.loader-txt {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: var(--font-bn);
+}
+</style>
+</head>
+<body>
+
+<!-- ══ Page Loader ══ -->
+<div id="pageLoader">
+  <div class="loader-logo">Nova<span>TEch</span> BD</div>
+  <div class="loader-ring"></div>
+  <div class="loader-txt">লোড হচ্ছে...</div>
+</div>
+
+<!-- ══════════════════════════════════════
+     AUTH SCREEN
+══════════════════════════════════════ -->
+<div id="authScreen" style="display:none;">
+
+  <!-- Floating orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <div class="auth-wrap">
+
+    <!-- Bismillah -->
+    <div class="bismillah-wrap">
+      <div class="bismillah-line"></div>
+      <div class="bismillah-text">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+      <div class="bismillah-bn">পরম করুণাময় আল্লাহর নামে শুরু করছি</div>
+      <div class="bismillah-line" style="margin-top:14px;margin-bottom:0;"></div>
+    </div>
+
+    <!-- Brand -->
+    <div class="brand-wrap">
+      <div class="brand-icon">
+        <div class="brand-icon-inner">⚡</div>
+      </div>
+      <div class="brand-name">Nova<span>TEch</span> BD</div>
+      <div class="brand-tagline">স্মার্ট বিজনেস ম্যানেজমেন্ট সিস্টেম</div>
+    </div>
+
+    <!-- Login Card -->
+    <div class="login-card">
+      <div class="card-title">স্বাগতম 👋</div>
+      <div class="card-sub">আপনার অ্যাকাউন্টে লগইন করুন</div>
+
+      <!-- Method Tabs -->
+      <div class="method-tabs" id="methodTabs">
+        <button class="method-tab active" onclick="switchMethod('email')" id="tab-email">
+          <span class="tab-ico">✉️</span>
+          <span>ইমেইল</span>
+        </button>
+        <button class="method-tab" onclick="switchMethod('phone')" id="tab-phone">
+          <span class="tab-ico">📱</span>
+          <span>মোবাইল</span>
+        </button>
+        <button class="method-tab" onclick="switchMethod('empid')" id="tab-empid">
+          <span class="tab-ico">🪪</span>
+          <span>EMP ID</span>
+        </button>
+      </div>
+
+      <!-- Error Box -->
+      <div class="auth-err" id="authErr">
+        <span>⚠️</span>
+        <span id="authErrMsg">ইমেইল বা পাসওয়ার্ড ভুল।</span>
+      </div>
+
+      <!-- Email Input -->
+      <div class="inp-group" id="field-email">
+        <div class="inp-label"><span class="lbl-ico">✉️</span> ইমেইল ঠিকানা</div>
+        <div class="inp-wrap">
+          <input class="inp" type="email" id="loginEmail" placeholder="example@email.com" autocomplete="email">
+          <span class="inp-icon">@</span>
+        </div>
+      </div>
+
+      <!-- Phone Input -->
+      <div class="inp-group" id="field-phone" style="display:none;">
+        <div class="inp-label"><span class="lbl-ico">📱</span> মোবাইল নম্বর</div>
+        <div class="inp-wrap">
+          <input class="inp" type="tel" id="loginPhone" placeholder="01XXXXXXXXX" autocomplete="tel">
+          <span class="inp-icon">📞</span>
+        </div>
+      </div>
+
+      <!-- Employee ID Input -->
+      <div class="inp-group" id="field-empid" style="display:none;">
+        <div class="inp-label"><span class="lbl-ico">🪪</span> Employee ID</div>
+        <div class="inp-wrap">
+          <input class="inp" type="text" id="loginEmpId" placeholder="NTB-XXXX" autocomplete="off" style="text-transform:uppercase;">
+          <span class="inp-icon">🏷️</span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="inp-group">
+        <div class="inp-label"><span class="lbl-ico">🔐</span> পাসওয়ার্ড</div>
+        <div class="inp-wrap with-toggle">
+          <input class="inp" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password">
+          <button class="pass-toggle" onclick="togglePass()" id="passToggle" type="button">👁️</button>
+        </div>
+      </div>
+
+      <!-- Login Button -->
+      <button class="btn-login" onclick="doLogin()" id="loginBtn">
+        <span class="btn-text">🔓 লগইন করুন</span>
+        <div class="btn-spinner"></div>
+      </button>
+
+    </div><!-- /login-card -->
+
+    <!-- Footer -->
+    <div class="auth-footer">
+      <p>Powered by <span>NovaTEch BD</span> &nbsp;|&nbsp; v2.0</p>
+      <div class="role-pills">
+        <span class="role-pill pill-admin">Admin</span>
+        <span class="role-pill pill-manager">Manager</span>
+        <span class="role-pill pill-worker">Worker</span>
+      </div>
+    </div>
+
+  </div><!-- /auth-wrap -->
+</div><!-- /authScreen -->
+
+
+<!-- ══════════════════════════════════════
+     APP SCREEN (after login)
+══════════════════════════════════════ -->
+<div id="appScreen">
+  <!-- modules will inject content here -->
+  <p style="padding:40px;text-align:center;color:#475569;font-size:14px;">App loading...</p>
+</div>
+
+
+<!-- ══ Toast ══ -->
+<div class="toast" id="toast"></div>
+
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script type="module" src="core/firebase.js"></script>
+<script type="module" src="core/auth.js"></script>
+<script type="module" src="core/router.js"></script>
+<script>
+// ── Login Method Switch ──
+let currentMethod = 'email';
+
+function switchMethod(method) {
+  currentMethod = method;
+  document.getElementById('field-email').style.display  = method === 'email'  ? 'block' : 'none';
+  document.getElementById('field-phone').style.display  = method === 'phone'  ? 'block' : 'none';
+  document.getElementById('field-empid').style.display  = method === 'empid'  ? 'block' : 'none';
+
+  ['email','phone','empid'].forEach(m => {
+    document.getElementById('tab-' + m).classList.toggle('active', m === method);
+  });
+
+  hideErr();
+}
+
+// ── Password Toggle ──
+let passVisible = false;
+function togglePass() {
+  passVisible = !passVisible;
+  const inp = document.getElementById('loginPass');
+  const btn = document.getElementById('passToggle');
+  inp.type = passVisible ? 'text' : 'password';
+  btn.textContent = passVisible ? '🙈' : '👁️';
+}
+
+// ── Error ──
+function showErr(msg) {
+  const el = document.getElementById('authErr');
+  document.getElementById('authErrMsg').textContent = msg;
+  el.classList.add('show');
+}
+function hideErr() {
+  document.getElementById('authErr').classList.remove('show');
+}
+
+// ── Toast ──
+function showToast(msg, isErr = false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (isErr ? 'err' : 'success') + ' show';
+  setTimeout(() => { t.className = 'toast'; }, 3000);
+}
+window.showToast = showToast;
+
+// ── Enter key → login ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const auth = document.getElementById('authScreen');
+    if (auth && auth.style.display !== 'none') doLogin();
+  }
+});
+
+// ── doLogin — Firebase এ connect হবে app.js থেকে ──
+function doLogin() {
+  hideErr();
+  const pass = document.getElementById('loginPass').value.trim();
+  if (!pass) { showErr('পাসওয়ার্ড দিন।'); return; }
+
+  let identifier = '';
+  if (currentMethod === 'email') {
+    identifier = document.getElementById('loginEmail').value.trim();
+    if (!identifier) { showErr('ইমেইল দিন।'); return; }
+  } else if (currentMethod === 'phone') {
+    identifier = document.getElementById('loginPhone').value.trim();
+    if (!identifier) { showErr('মোবাইল নম্বর দিন।'); return; }
+  } else {
+    identifier = document.getElementById('loginEmpId').value.trim().toUpperCase();
+    if (!identifier) { showErr('Employee ID দিন।'); return; }
+  }
+
+  // Loading state
+  const btn = document.getElementById('loginBtn');
+  btn.classList.add('loading');
+
+  // app.js এ _doLoginWithMethod expose করা হবে
+  if (typeof window._doLoginWithMethod === 'function') {
+    window._doLoginWithMethod(currentMethod, identifier, pass)
+      .catch(err => {
+        btn.classList.remove('loading');
+        showErr(err.message || 'লগইন ব্যর্থ হয়েছে।');
+      });
+  } else {
+    // Firebase not loaded yet
+    setTimeout(() => {
+      btn.classList.remove('loading');
+      showErr('সিস্টেম লোড হয়নি। একটু অপেক্ষা করুন।');
+    }, 500);
+  }
+}
+window.doLogin = doLogin;
+
+// ── Page Loader — auth.js handle করবে ──
+</script>
+
+</body>
+</html>
